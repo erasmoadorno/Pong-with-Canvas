@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dinamic pong with Canvas</title>
+    <style>
+
+        body{
+            background: rgb(0,27,228);
+            background: radial-gradient(circle, rgba(0, 30, 255, 0.1) 0%, rgba(0, 0, 255, 0.1) 60%, rgba(255, 0, 51, 0.1) 100%);
+        }
+        #btnIni{
+            font-size: 2.0em;
+            width: 200px;
+            margin-left: 400px;
+            display: flexbox;
+            color: rgb(9, 0, 128);
+            background-color: white;
+            background-image: none;
+        }
+        #canvas{
+            background-image: none;
+            background-color: white;
+            border: 2px solid green;
+        }
+        #nonStop{
+            display: block;
+            font-family:  Calibri, 'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
+            margin-left: 80vw;
+            font-size: 1.2em;
+            background-image: none;
+            
+        }
+    </style>
+    <script src="Pad.js"></script>
+    <script src="Bola.js"></script>
+    <script src="Cpu.js"></script>
+    <script src="Placar.js"></script>
+</head>
+<body>
+    <canvas id="canvas" width="1000" height="500"></canvas>
+    <div id="nonStop">
+        <input type="checkbox" name="NonStop" id="nonStopCB">Non-stop mode
+    </div>
+    <input type="button" value="&#x25B6" onclick="bola.statusB=true" id="btnIni"/>
+</body>
+<script>
+    const cx = document.getElementById("canvas").getContext("2d")
+    let pj=0
+    let pcpu=0
+    const controle={
+        cima:false,
+        esquerda:false,
+        baixo:false,
+        direita:false
+    }
+    
+    const player = new Jogador(cx, controle)
+    const bola = new Bola(cx, player)
+    const cpu = new Cpu(cx, bola)
+    const placar= new Placar(cx)
+
+    window.addEventListener("keydown", ()=>{
+        if (event.key == "w" || event.key == 'W' || event.key == "ArrowUp"){
+            controle.cima = true
+        }if (event.key == "s" || event.key == "S" || event.key == "ArrowDown"){
+           controle.baixo = true
+        }if (event.key == "d" || event.key == "D" || event.key == "ArrowRight"){
+            controle.direita = true
+        }if (event.key == "a" || event.key == "A" || event.key == "ArrowLeft"){
+            controle.esquerda = true
+        }
+    
+    })
+
+    window.addEventListener("keyup", ()=>{
+        if (event.key == "w" || event.key == 'W' || event.key == "ArrowUp"){
+            controle.cima = false
+        }if (event.key == "s" || event.key == "S" || event.key == "ArrowDown"){ 
+            controle.baixo = false
+        }if (event.key == "d" || event.key == "D" || event.key == "ArrowRight"){ 
+            controle.direita = false
+        }if (event.key == "a" || event.key == "A" || event.key == "ArrowLeft"){
+            controle.esquerda = false
+        }
+    })
+
+    const game=()=> {
+        cx.clearRect(0,0,canvas.width, canvas.height, '#000')
+        player.desenho()
+        bola.desenho()
+        cpu.desenho()
+        placar.desenho()
+        requestAnimationFrame(game)
+    }
+
+    window.requestAnimationFrame(game)
+
+</script>
+</html>
